@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <button style="display:inline-block" onclick="openShort()">Short polling</button>
+        <button style="display:inline-block" onclick="openLong()">Long polling</button>
+        <button style="display:inline-block" onclick="openSocket()">Socket</button>
+    </div>
+</body>
+<script>
+    function openShort() {
+        window.location.href="/short"
+    }
+
+    function openLong() {
+        window.location.href="/long"
+    }
+    function openSocket() {
+        window.location.href="/socket"
+    }
+</script>
+</html>

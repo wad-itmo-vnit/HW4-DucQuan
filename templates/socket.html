@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <title>A simple chatbot</title>
+</head>
+<body style="background-color: grey">
+    <p id="title">Chat with our bot</p>
+    <div class="center font" > 
+        <div>
+            <label for="username">Username:</label>
+            <input class="font" type="text" name="username">
+        </div>
+        <div>
+            <label for="check">Ready to chat?</label>
+            <input type="checkbox" name="check" onclick="check()">
+        </div>
+    </div>
+    <div>
+        <textarea id="field" class="font"></textarea>
+    </div>
+    <form>
+        <input class="font" name = 'mess' id="mess" placeholder="Say something!!!">
+        <input type="submit" id="myBtn" class="font" value="Send">
+    </form>
+    
+</body>
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+<script>
+    const socket = io();
+    const bot = "BOT: ";
+    const form = document.getElementsByTagName('form')[0];
+
+    socket.on('connect', () => {
+        console.log('Connected!');
+    })
+
+    socket.on('message', (data) => {
+        document.getElementById("field").value += bot + data.ans + '\r\n';
+    })
+    
+
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        var user = document.getElementsByName("username")[0].value;
+        var content = document.getElementById("mess").value;
+        
+        if(user != '' && content !=''){
+            document.getElementById("mess").value = "";
+            document.getElementById("field").value += user + ": " + content + '\r\n';
+            socket.send(content);
+        };
+    };
+    
+    function check() {
+        const user = document.getElementsByName("username")[0].value;
+        document.getElementById("field").value += bot + "Xin chào " + user + "! Hãy hỏi tôi điều gì đó!!" + '\r\n';
+    };
+    
+</script>
+</html>

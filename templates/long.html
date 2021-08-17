@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <title>A simple chatbot</title>
+</head>
+<body style="background-color: grey">
+    <p id="title">Chat with our bot</p>
+    <div class="center font" > 
+        <div>
+            <label for="username">Username:</label>
+            <input class="font" type="text" name="username">
+        </div>
+        <div>
+            <label for="check">Ready to chat?</label>
+            <input type="checkbox" name="check" onclick="check()">
+        </div>
+    </div>
+    <div>
+        <textarea id="field" class="font"></textarea>
+    </div>
+    <form>
+        <input class="font" id="mess" placeholder="Say something!!!">
+        <input type="submit" id="myBtn" class="font" value="Send">
+    </form>
+    
+</body>
+<script>
+    const url = '/long';
+    const bot = "BOT: ";
+    var input = document.getElementById("mess");
+    const form = document.getElementsByTagName('form')[0];
+    const http = new XMLHttpRequest();
+
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        const user = document.getElementsByName("username")[0].value;
+        var content = document.getElementById("mess").value;
+        document.getElementById("field").value += user + ": " + content + '\r\n';
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        http.send('content=' + content);
+        document.getElementById("mess").value = "";
+    }
+    
+    http.onreadystatechange = async () => {
+        if (http.readyState === XMLHttpRequest.DONE && http.status === 200){
+            document.getElementById("field").value += bot + http.responseText + '\r\n';
+        }
+    }
+
+    function check() {
+        const user = document.getElementsByName("username")[0].value;
+        document.getElementById("field").value += bot + "Xin chào " + user + "! Hãy hỏi tôi điều gì đó!!" + '\r\n';
+    };
+
+    http.onloadend = get_data;
+    http.ontimeout = get_data;
+    http.onerror = get_data;
+
+    function get_data() {
+        http.open('POST', url, true);
+        http.send();
+    }
+    
+    get_data()
+</script>
+</html>
